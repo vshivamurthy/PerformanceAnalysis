@@ -10,7 +10,11 @@ import java.util.Calendar;
 public class SummarizeSQL {
     public String getSummarizeSQL(Summarize summarize, String metric_name, String run, String stack, String RunDay)
     {
-       String sql = "select "  +  summarize.groupbyparmeters() +
+       String sql =
+          //      "insert into table " + summarize.getTableName() + " partition(run=\"" + run + "\") " +
+                "select "  +
+          //       "'" + metric_name + "'" + " , " +
+                summarize.groupbyparmeters() +
                 " count(*), " +
                 " avg(cast(" + metric_name +" as BIGINT)), " +
                 " stddev_pop(cast(" + metric_name +" as BIGINT))," +

@@ -1,7 +1,5 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.io.PrintStream;
 import java.sql.ResultSet;
-import java.sql.Statement;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,36 +13,31 @@ public class MetricSummarize implements Runnable {
     private String sql = null;
     private String run = null;
     private String metric = null;
+    private PrintStream printStream;
     private static HiveConnection hiveConnection = new HiveConnection();
     private Summarize summarize;
 
-    MetricSummarize(String sql, Summarize summarize, String run, String metric)
-    {
+    MetricSummarize(String sql, Summarize summarize, String run, String metric, PrintStream printStream) {
         this.sql = sql;
         this.summarize = summarize;
         this.run = run;
         this.metric = metric;
+        this.printStream = printStream;
     }
 
-    public void run()
-    {
+    public void run() {
+        StatementHolder hiveStatement = StatementFactory.getHiveStatement();
+        try {
 
-        try
-        {
+            System.out.println(sql);
+            ResultSet res = hiveStatement.statement().executeQuery(sql);
+            summarize.printResults(res, run, metric, printStream);
 
-        Connection con = HiveConnection.getConnection();
-        String type = "run";
-        Statement stmt = con.createStatement();
-        ResultSet res = stmt.executeQuery(sql);
-        summarize.printResults(res,run,metric);
-
-        stmt.close();
-        con.close();
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Error occurred for " + metric);
             e.printStackTrace();
+        } finally {
+            hiveStatement.close();
         }
     }
 

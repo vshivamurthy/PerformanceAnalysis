@@ -1,3 +1,4 @@
+import java.io.PrintStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -11,5 +12,6 @@ import java.sql.SQLException;
 public abstract class Summarize {
     public abstract String groupbyparmeters();
     public abstract String groupbyclause();
-    public abstract void printResults(ResultSet res, String run, String type) throws SQLException;
+    public abstract void printResults(ResultSet res, String run, String type, PrintStream printStream) throws SQLException;
+    public abstract String getTableName();
 }
