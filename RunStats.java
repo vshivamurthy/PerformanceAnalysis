@@ -58,8 +58,9 @@ public class RunStats {
 
         StatementHolder hiveStatement = StatementFactory.getHiveStatement();
         try {
-            System.out.println(format("load data inpath ''hdfs:///temp_hive/temp_hive_run.txt'' into table run_summary partition (run=''{0}'')", run));
-            hiveStatement.statement().execute(format("load data inpath ''hdfs:///temp_hive/temp_hive_run.txt'' into table run_summary partition (run=''{0}'')", run));
+            String table = summarize.getTableName();
+            System.out.println(format("load data inpath ''hdfs:///temp_hive/temp_hive_run.txt'' into table {1} partition (run=''{0}'')", run, table));
+            hiveStatement.statement().execute(format("load data inpath ''hdfs:///temp_hive/temp_hive_run.txt'' into table {1} partition (run=''{0}'')", run, table));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
